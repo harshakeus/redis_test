@@ -11,7 +11,7 @@ redisClient.on('connect',function(cc){
 
 module.exports.insert = function(key,value){
 return new Promise(function(resolve,reject){
-    redisClient.set(key,value,function(err,result){
+    redisClient.hset("users",key,value,function(err,result){
         if(err){
             reject(err);
         }
@@ -25,7 +25,19 @@ return new Promise(function(resolve,reject){
 
 module.exports.get = function(key){
     return new Promise (function(resolve,reject){
-        redisClient.get(key,function(err,result){
+        redisClient.hget("users",key,function(err,result){
+            if(err){
+                reject(err);
+            }
+            else{
+                resolve(result);
+            }
+        })
+    })
+}
+module.exports.getall = function(){
+    return new Promise (function(resolve,reject){
+        redisClient.hgetall("users",function(err,result){
             if(err){
                 reject(err);
             }
